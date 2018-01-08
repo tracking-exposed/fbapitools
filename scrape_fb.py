@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jan  3 11:01:02 2018
-
-@author: Fede
+This is a copy of https://github.com/dfreelon/fb_scrape_public
 """
 
 import copy
