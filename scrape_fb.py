@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-This is a copy of https://github.com/dfreelon/fb_scrape_public
+This is a (very lightly) modified copy of https://github.com/dfreelon/fb_scrape_public
 """
 
 import copy
@@ -158,6 +158,7 @@ def scrape_fb(client_id="",client_secret="",token="",ids="",outfile="fb_data.csv
             data_rxns.append('https://graph.facebook.com/v' + version + '/' + fid.strip() + '/' + scrape_mode + '?fields=reactions.type(' + i + ').summary(total_count).limit(0)&limit=100&' + fb_token)
         
         next_item = url_retry(data_url)
+        json_ret_data = next_item['data']
         
         if next_item != False:
             for n,i in enumerate(data_rxns):
@@ -177,6 +178,7 @@ def scrape_fb(client_id="",client_secret="",token="",ids="",outfile="fb_data.csv
         
         while 'paging' in next_item and 'next' in next_item['paging']:
             next_item = url_retry(next_item['paging']['next'])
+            json_ret_data += next_item['data']
             try:
                 for i in new_rxns:
                     start = next_item['paging']['next'].find("from")
@@ -204,6 +206,6 @@ def scrape_fb(client_id="",client_secret="",token="",ids="",outfile="fb_data.csv
             
         print(x+1,'Facebook ID(s) archived.',round(time.time()-time1,2),'seconds elapsed.')
 
-    print('Script completed in',time.time()-time1,'seconds.')
-    return csv_data
+    print('Source collection completed in',round(time.time()-time1,2),'seconds.')
+    return json_ret_data
     

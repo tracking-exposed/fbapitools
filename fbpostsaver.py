@@ -53,11 +53,16 @@ with open(keyfile, 'r') as kf:
                 continue
 
             pageName = source['pagina'].split('/')[-1]
-            outputFile = os.path.join(todayposts, pageName + '.csv')
-            print("Processing %s (%s output CSV file)" % (source['nome'], outputFile))
-            if(os.path.exists(outputFile)):
+            CSVoutput = os.path.join(todayposts, pageName + '.csv')
+            JSONoutput = os.path.join(todayposts, pageName + '.json')
+            print("Processing %s (%s output CSV file)" % (source['nome'], CSVoutput))
+            if(os.path.exists(CSVoutput)):
                 print("output file already exists: skipping")
                 continue
 
-            json_posts = scrape_fb.scrape_fb(token=key,ids=pageName, outfile=outputFile)
+            json_posts = scrape_fb.scrape_fb(token=key,ids=pageName, outfile=CSVoutput, end_date="2018-01-01")
+
+            with open(JSONoutput, 'w+') as jop:
+                json.dump(json_posts, jop, sort_keys=True, indent=3)
+                print("Saved JSONfile %s" % JSONoutput)
 
