@@ -39,7 +39,7 @@ except FileExistsError:
 with open(keyfile, 'r') as kf:
     key = json.load(kf)['key']
 
-    with open(sys.argv[1], 'r') as sourcesfp:
+    with open(sys.argv[1], 'r', encoding='utf-8') as sourcesfp:
         sources = json.load(sourcesfp)
         """
         p sources[0]
@@ -62,7 +62,7 @@ with open(keyfile, 'r') as kf:
 
             json_posts = scrape_fb.scrape_fb(token=key,ids=pageName, outfile=CSVoutput, end_date="2018-01-01")
 
-            with open(JSONoutput, 'w+') as jop:
+            with open(JSONoutput, 'w+', encoding='utf-8') as jop:
                 json.dump(json_posts, jop, sort_keys=True, indent=3)
                 print("Saved JSONfile %s" % JSONoutput)
 
