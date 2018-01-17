@@ -21,7 +21,7 @@ for source in sourceslist:
     if os.path.exists(outName):
         continue
     else:
-        posts = fsp.scrape_fb(token="356213428133944|KlA5S4ouLF3QGC-0qNGFm_ZxqJc",ids= source, outfile= source + '.csv', end_date='2018-01-12')
+        posts = fsp.scrape_fb(token="",ids= source, outfile= source + '.csv', end_date='2018-01-12')
         data = pandas.DataFrame(posts)
         postsIdslist.append(data[16])
 
@@ -33,7 +33,7 @@ for idss in postsIdslist:
         if os.path.exists(destName):
             continue
         else:
-            data = fsp.scrape_fb("356213428133944","41c262db64ad42495efb33e754df5573",ids= post,scrape_mode="comments", outfile=destName) 
+            data = fsp.scrape_fb("","",ids= post,scrape_mode="comments", outfile=destName) 
             df = pandas.DataFrame(data)
             sorteddata = df.sort_values([4], ascending=[False])
             comments = sorteddata[2][:9]
@@ -42,7 +42,7 @@ for idss in postsIdslist:
 
 for piece in commentslist:
     print('sto analizzando:' + piece)
-    f = urllib3.request.urlencode({"min_confidence" : "0.6", "text" : piece , "country" : "-1" , "social" : "False", "top_entities" : "8", "token": "9462a113d37b426496eb88ce3286ce8c" })
+    f = urllib3.request.urlencode({"min_confidence" : "0.6", "text" : piece , "country" : "-1" , "social" : "False", "top_entities" : "8", "token": "" })
     print(f)
     f = requests.get(f)
     #import pdb; pdb.pset_trace()
@@ -57,4 +57,3 @@ for piece in commentslist:
 
 
 
-#https://api.dandelion.eu/datatxt/nex/v1/?min_confidence=0.6&url=https%3A%2F%2Ffacebook.tracking.exposed%2Finitiatives&country=-1&social=False&top_entities=8&token=9462a113d37b426496eb88ce3286ce8c
