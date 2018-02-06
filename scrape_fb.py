@@ -158,7 +158,12 @@ def scrape_fb(client_id="",client_secret="",token="",ids="",outfile="fb_data.csv
             data_rxns.append('https://graph.facebook.com/v' + version + '/' + fid.strip() + '/' + scrape_mode + '?fields=reactions.type(' + i + ').summary(total_count).limit(0)&limit=100&' + fb_token)
         
         next_item = url_retry(data_url)
-        json_ret_data = next_item['data']
+        json_ret_data = False
+        try:
+            json_ret_data = next_item['data']
+        except Exception as e:
+            print("Error", fb_ids, e)
+            break
         
         if next_item != False:
             for n,i in enumerate(data_rxns):
@@ -178,8 +183,8 @@ def scrape_fb(client_id="",client_secret="",token="",ids="",outfile="fb_data.csv
         
         while 'paging' in next_item and 'next' in next_item['paging']:
             next_item = url_retry(next_item['paging']['next'])
-            json_ret_data += next_item['data']
             try:
+                json_ret_data += next_item['data']
                 for i in new_rxns:
                     start = next_item['paging']['next'].find("from")
                     end = next_item['paging']['next'].find("&",start)
@@ -191,6 +196,7 @@ def scrape_fb(client_id="",client_secret="",token="",ids="",outfile="fb_data.csv
                         except (KeyError,IndexError):
                             j[i] = 0
             except KeyError:
+                print("data_url",data_url,"continue")
                 continue
             
             csv_data = make_csv_chunk(next_item,scrape_mode,msg_user,msg_content)

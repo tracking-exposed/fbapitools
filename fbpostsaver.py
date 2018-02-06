@@ -10,7 +10,6 @@ import os
 import json
 import sys
 import datetime
-import pprint
 
 keyfile = 'config/key.json'
 destdirectory = 'collected'
@@ -25,7 +24,6 @@ if not os.path.isdir(destdirectory):
     print("Require '%s' destinastion directory: not found" % destdirectory)
     sys.exit(1)
 
-
 today = datetime.date.today()
 todayposts = os.path.join(destdirectory, today.strftime("%Y-%m-%d"))
 
@@ -35,6 +33,11 @@ try:
 except FileExistsError:
     pass
 
+try:
+    print("using as end_date %s" % (sys.argv[2]));
+except Exception:
+    print("missing end_date in sys.argv[2]");
+    sys.exit(1);
 
 with open(keyfile, 'r') as kf:
     key = json.load(kf)['key']
@@ -47,7 +50,7 @@ with open(keyfile, 'r') as kf:
         """
 
         for source in sources:
-            pprint.pprint(source)
+            print("%s" % source['nome'])
             if(source['pagina'].endswith('/')):
                 print("Error in the object %s, %s ends with '/', clean it (skipped)" % (source['nome'], source['pagina']))
                 continue
@@ -60,7 +63,8 @@ with open(keyfile, 'r') as kf:
                 print("output file already exists: skipping")
                 continue
 
-            json_posts = scrape_fb.scrape_fb(token=key,ids=pageName, outfile=CSVoutput, end_date="2018-01-01")
+            print("using as end_date %s" % (sys.argv[2]));
+            json_posts = scrape_fb.scrape_fb(token=key,ids=pageName, outfile=CSVoutput, end_date=sys.argv[2]);
 
             with open(JSONoutput, 'w+', encoding='utf-8') as jop:
                 json.dump(json_posts, jop, sort_keys=True, indent=3)
